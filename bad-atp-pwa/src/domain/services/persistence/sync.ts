@@ -3,7 +3,6 @@
 // Transfert via AirDrop ou iCloud Drive entre appareils.
 
 import { db } from './db';
-import { uuid } from '../../utils/uuid';
 
 const SNAPSHOT_VERSION = 1;
 
@@ -97,7 +96,7 @@ export async function importSnapshot(json: string, mode: ImportMode): Promise<Im
     const counts: Record<string, number> = {};
 
     async function upsertRows(
-      table: { get: (pk: string) => Promise<AnyRow | undefined>; put: (row: AnyRow) => Promise<unknown> },
+      table: ReturnType<typeof db.classes>,
       rows: unknown[],
       pkField: string,
       label: string
