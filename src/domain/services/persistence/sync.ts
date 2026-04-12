@@ -98,8 +98,8 @@ export async function importSnapshot(json: string, mode: ImportMode): Promise<Im
     async function upsertRows(
       table: any ,
      rows: unknown[],
-      label: string
-    ) {
+      pkField: string,
+    label:string ) {
       let n = 0;
       for (const row of rows as AnyRow[]) {
         const pk = row[pkField] as string;
