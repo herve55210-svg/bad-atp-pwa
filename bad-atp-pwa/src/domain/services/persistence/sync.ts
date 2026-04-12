@@ -97,7 +97,7 @@ export async function importSnapshot(json: string, mode: ImportMode): Promise<Im
     const counts: Record<string, number> = {};
 
     async function upsertRows(
-      table: ReturnType<typeof db.classes>,
+      table: { get: (pk: string) => Promise<AnyRow | undefined>; put: (row: AnyRow) => Promise<unknown> },
       rows: unknown[],
       pkField: string,
       label: string
