@@ -96,8 +96,8 @@ export async function importSnapshot(json: string, mode: ImportMode): Promise<Im
     const counts: Record<string, number> = {};
 
     async function upsertRows(
-      table: any
-      pkField: string,
+      table: any ,
+     rows: unknown[],
       label: string
     ) {
       let n = 0;
