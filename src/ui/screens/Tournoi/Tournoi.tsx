@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { db, ClassRow, TournamentRow } from '../../../domain/services/persistence/db';
 import TournamentPlay from './TournamentPlay';
-import { InputModal } from '../../components/Modal';
+import { InputModal, ConfirmModal } from '../../components/Modal';
 import { useToast } from '../../components/Toast';
 
 const uuid = () => crypto.randomUUID();
@@ -109,13 +109,13 @@ export default function Tournoi() {
 )}
 </div>
 );
-{deleteTarget && (
+{deleteTarget !== null && (
   <ConfirmModal
     title="Supprimer le cycle"
     message={`Supprimer "${deleteTarget.name}" ? Cette action est irréversible.`}
     confirmLabel="Supprimer"
     danger
-    onConfirm={async () => { await db.tournaments.delete(deleteTarget.id); await refreshTournaments(classId!); setDeleteTarget(null); show(`Cycle "${deleteTarget.name}" supprimé`); }}
+    onConfirm={async () => { await db.tournaments.delete(deleteTarget!.id); await refreshTournaments(classId!); setDeleteTarget(null); show(`Cycle "${deleteTarget!.name}" supprimé`); }}
     onClose={() => setDeleteTarget(null)}
   />
 )}
