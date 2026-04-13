@@ -101,6 +101,6 @@ export default function Tournoi() {
           title="Nouveau cycle"
           label="Nom du cycle"
           placeholder="ex: Cycle 1 – Badminton"
-  onConfirm={async (name) => { await addTournament(name); setShowAddModal(false); }}
-  onClose={() => setShowAddModal(false)} 
-}/>
+  onConfirm={async (name) => { await addTournament(name); setShowAddModal(false); }}  
+onClose={() => setShowAddModal(false)} 
+/>
