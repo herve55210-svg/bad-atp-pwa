@@ -13,6 +13,7 @@ export default function Tournoi() {
   const [tournaments, setTournaments] = useState<TournamentRow[]>([]);
   const [selectedTournamentId, setSelectedTournamentId] = useState<string | null>(null);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<TournamentRow | null>(null);
   const { show } = useToast();
 
   async function refreshClasses() {
@@ -90,6 +91,7 @@ export default function Tournoi() {
                   <div className="small">{new Date(t.createdAt).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
                 </div>
                 <button className="primary" onClick={() => setSelectedTournamentId(t.id)}>Ouvrir →</button>
+                <button className="ghost" style={{ fontSize: 18, padding: '8px 10px' }} onClick={() => setDeleteTarget(t)}>🗑</button> 
               </div>
             ))
           )}
@@ -107,4 +109,14 @@ export default function Tournoi() {
 )}
 </div>
 );
+{deleteTarget && (
+  <ConfirmModal
+    title="Supprimer le cycle"
+    message={`Supprimer "${deleteTarget.name}" ? Cette action est irréversible.`}
+    confirmLabel="Supprimer"
+    danger
+    onConfirm={async () => { await db.tournaments.delete(deleteTarget.id); await refreshTournaments(classId!); setDeleteTarget(null); show(`Cycle "${deleteTarget.name}" supprimé`); }}
+    onClose={() => setDeleteTarget(null)}
+  />
+)}
 }
