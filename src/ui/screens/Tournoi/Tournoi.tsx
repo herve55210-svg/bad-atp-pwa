@@ -112,7 +112,7 @@ export default function Tournoi() {
 {deleteTarget !== null && (
   <ConfirmModal
     title="Supprimer le cycle"
-    message={`Supprimer "${deleteTarget.name}" ? Cette action est irréversible.`}
+    message={`Supprimer "${deleteTarget!.name}" ? Cette action est irréversible.`}
     confirmLabel="Supprimer"
     danger
     onConfirm={async () => { await db.tournaments.delete(deleteTarget!.id); await refreshTournaments(classId!); setDeleteTarget(null); show(`Cycle "${deleteTarget!.name}" supprimé`); }}
