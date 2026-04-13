@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { db, SessionEntryRow, StudentRow, SettingsRow } from '../../../domain/services/persistence/db';
 import { stableSort } from '../../../domain/rules/ranking';
 import { applyMatch, applyArbitrage } from '../../../domain/rules/scoring';
@@ -298,7 +298,7 @@ export default function CourtsView({ sessionId }: { sessionId: string }) {
     const t = await db.tournaments.get(sess.tournamentId);
     if (!t) return;
     const st = await db.settings.get(t.settingsId);
-    if (st) setSettings(st);
+    setSettings(st ?? null);
   }
 
   useEffect(() => { refresh(); }, [sessionId]);
