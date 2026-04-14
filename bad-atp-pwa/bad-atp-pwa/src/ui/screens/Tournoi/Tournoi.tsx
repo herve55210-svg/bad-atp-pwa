@@ -33,13 +33,13 @@ export default function Tournoi() {
   async function addTournament(name: string) {
     if (!classId) return;
     const settings = await db.settings.toCollection().first();
-    if (!settings) return show('Paramètres introuvables.');
+    if (!settings) return show('Parametres introuvables.');
     await db.tournaments.add({
       id: uuid(), classId, name, settingsId: settings.id,
       createdAt: nowIso(), updatedAt: nowIso()
     });
     await refreshTournaments(classId);
-    show(`Cycle "${name}" créé ✓`);
+    show('Cycle cree');
   }
 
   async function deleteTournament(t: TournamentRow) {
@@ -51,12 +51,5 @@ export default function Tournoi() {
     await db.sessions.where('tournamentId').equals(t.id).delete();
     await db.tournaments.delete(t.id);
     await refreshTournaments(classId);
-    show(`Cycle "${t.name}" supprimé`);
+    show('Cycle supprime');
   }
-
-  if (selectedTournamentId) {
-    const t = tournaments.find(x => x.id === selectedTournamentId);
-    return (
-      <div>
-        <div className="page-header">
-          <button className="ghost" onClick={() => setSelectedTournamentId(null)} style={{ padding: '8px 0',
