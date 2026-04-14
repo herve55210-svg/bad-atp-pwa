@@ -53,3 +53,79 @@ export default function Tournoi() {
     await refreshTournaments(classId);
     show('Cycle supprime');
   }
+
+  if (selectedTournamentId) {
+    const t = tournaments.find(x => x.id === selectedTournamentId);
+    return (
+      <div>
+        <div className="page-header">
+          <button className="ghost" onClick={() => setSelectedTournamentId(null)} style={{ padding: '8px 0', fontSize: 20 }}>{'<-'}</button>
+          <h1 className="page-title" style={{ flex: 1, fontSize: 22 }}>{t?.name ?? 'Tournoi'}</h1>
+        </div>
+        <TournamentPlay tournamentId={selectedTournamentId} />
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <div className="page-header">
+        <h1 className="page-title">Tournoi</h1>
+        <button className="primary" onClick={() => setShowAddModal(true)} disabled={!classId}>+ Cycle</button>
+      </div>
+      <p className="page-subtitle">Selectionne une classe puis un cycle</p>
+      {classes.length === 0 ? (
+        <div className="empty">
+          <div className="empty-icon">🏫</div>
+          <p>Aucune classe.</p>
+        </div>
+      ) : (
+        <>
+          <div className="chip-list">
+            {classes.map(c => (
+              <div key={c.id} className={'chip' + (classId === c.id ? ' active' : '')} onClick={() => setClassId(c.id)}>
+                {c.name}
+              </div>
+            ))}
+          </div>
+          {tournaments.length === 0 ? (
+            <div className="empty" style={{ padding: '32px 16px' }}>
+              <div className="empty-icon">🏆</div>
+              <p>Aucun cycle.</p>
+            </div>
+          ) : (
+            tournaments.map(t => (
+              <div key={t.id} className="card" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: 17 }}>{t.name}</div>
+                  <div className="small">{new Date(t.createdAt).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
+                </div>
+                <button className="ghost" style={{ fontSize: 18, padding: '8px 10px', color: '#C0392B' }} onClick={() => setDeleteTarget(t)}>🗑</button>
+                <button className="primary" onClick={() => setSelectedTournamentId(t.id)}>Ouvrir</button>
+              </div>
+            ))
+          )}
+        </>
+      )}
+      {showAddModal && (
+        <InputModal
+          title="Nouveau cycle"
+          label="Nom du cycle"
+          placeholder="ex: Cycle Badminton"
+          onConfirm={async (name) => { setShowAddModal(false); await addTournament(name); }}
+          onClose={() => setShowAddModal(false)}
+        />
+      )}
+      {deleteTarget && (
+        <ConfirmModal
+          title="Supprimer le cycle"
+          message={'Supprimer ' + deleteTarget.name + ' ? Action irreversible.'}
+          confirmLabel="Supprimer"
+          danger
+          onConfirm={() => deleteTournament(deleteTarget)}
+          onClose={() => setDeleteTarget(null)}
+        />
+      )}
+    </div>
+  );
+}
